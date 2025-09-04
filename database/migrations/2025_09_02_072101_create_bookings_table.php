@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->id('booking_id');
             $table->date('booking_date');
             $table->string('payment_status', 50);
-            $table->string('special_request', 100);
+            $table->string('payment_transaction_id', 100)->nullable();
+            $table->string('special_request', 100)->nullable();
             $table->string('address', 50);
             $table->string('phone', 50);
             $table->string('nationality', 50);

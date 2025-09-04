@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\PackagesController;
 use App\Http\Controllers\ScheduleController;
@@ -59,8 +60,12 @@ Route::get('/booking/{booking}/ticket', [BookingController::class, 'ticket'])
     ->whereNumber('booking')
     ->name('booking.ticket');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+// Route::view('dashboard', 'dashboard')
+//     ->middleware(['auth', 'verified'])
+//     ->name('dashboard');
+
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth'])
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {

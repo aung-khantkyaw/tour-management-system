@@ -7,21 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     protected $primaryKey = 'booking_id';
-    protected $fillable = ['user_id', 'schedule_id', 'booking_date', 'payment_status', 'special_request', 'address', 'phone', 'nationality', 'package_status'];
+    protected $fillable = [
+        'user_id',
+        'schedule_id',
+        'booking_date',
+        'payment_status',
+        'special_request',
+        'address',
+        'phone',
+        'nationality',
+        'package_status'
+    ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 
     public function schedule()
     {
-        return $this->belongsTo(Schedule::class, 'schedule_id', 'schedule_id');
+        return $this->belongsTo(\App\Models\Schedule::class, 'schedule_id');
     }
 
     public function roomChoices()
     {
-        return $this->hasMany(RoomChoice::class, 'booking_id', 'booking_id');
+        return $this->hasMany(\App\Models\RoomChoice::class, 'booking_id');
     }
 
     public function confirmBooking()
