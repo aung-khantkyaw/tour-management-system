@@ -41,19 +41,24 @@ class BookingController extends Controller
             'nationality' => 'nullable|string|max:100',
             'address' => 'nullable|string|max:255',
             'special_request' => 'nullable|string|max:500',
-            'payment_status' => 'required|in:KBZPay,AyarPay,UABPay',
+            'payment_method' => 'required|in:KBZPay,AyarPay,UABPay',
+            'payment_transaction_id' => 'required|string|regex:/^[0-9]{20}$/',
+            'calculated_total' => 'required|numeric|min:0',
         ]);
 
         $booking = Booking::create([
             'user_id' => Auth::id(),
             'schedule_id' => $validated['schedule_id'],
             'booking_date' => now(),
-            'payment_status' => $validated['payment_status'],
-            'package_status' => 'pending',
+            'payment_method' => $validated['payment_method'],
+            'payment_status' => 'pending',
+            'booking_status' => 'pending',
             'phone' => $validated['phone'],
             'nationality' => $validated['nationality'] ?? null,
             'address' => $validated['address'] ?? null,
             'special_request' => $validated['special_request'] ?? null,
+            'payment_transaction_id' => $validated['payment_transaction_id'],
+            'total_amount' => $validated['calculated_total'],
         ]);
 
         RoomChoice::create([
@@ -108,7 +113,7 @@ class BookingController extends Controller
 
         $totalPrice = $packagePrice + $roomPrice;
 
-        $qr = PaymentQR::forProviderAmount($booking->payment_status, $totalPrice)->first();
+        $qr = PaymentQR::forProviderAmount($booking->payment_method, $totalPrice)->first();
 
         return view('livewire.guest.booking-ticket', compact(
             'booking',

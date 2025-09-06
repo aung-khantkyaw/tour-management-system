@@ -9,10 +9,12 @@ return new class extends Migration {
     {
         Schema::table('payment_q_r_s', function (Blueprint $table) {
             try {
-                $table->dropUnique('payment_q_r_s_qr_type_unique');
+                $table->dropUnique(['qr_type']);
             } catch (\Throwable $e) {
+                // Index might not exist
             }
         });
+        
         Schema::table('payment_q_r_s', function (Blueprint $table) {
             $table->unique(['qr_type', 'amount'], 'payment_q_r_s_type_amount_unique');
         });
@@ -24,12 +26,7 @@ return new class extends Migration {
             try {
                 $table->dropUnique('payment_q_r_s_type_amount_unique');
             } catch (\Throwable $e) {
-            }
-        });
-        Schema::table('payment_q_r_s', function (Blueprint $table) {
-            try {
-                $table->unique(['qr_type']);
-            } catch (\Throwable $e) {
+                // Index might not exist
             }
         });
     }

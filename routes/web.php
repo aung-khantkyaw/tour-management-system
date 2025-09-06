@@ -49,14 +49,12 @@ Route::get('/schedule/{schedule}/book', [BookingController::class, 'create'])
     ->whereNumber('schedule')
     ->name('schedule.book');
 
-Route::get('/history', function () {
-    return view('livewire.guest.history');
-})->middleware('auth')->name('history');
+Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])->middleware('auth')->name('history');
 
 // Tour Management Routes with Admin Prefix
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
     // Dashboard
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard')->middleware(\App\Http\Middleware\IsAdmin::class);
 
     // Hotels Management (page-based CRUD)
     Route::get('/hotels', [\App\Http\Controllers\Admin\HotelController::class, 'index'])->name('hotels.index');
@@ -102,7 +100,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::put('/packages/{package}', [\App\Http\Controllers\Admin\PackageController::class, 'update'])->name('packages.update');
     Route::get('/packages/{package}/delete', [\App\Http\Controllers\Admin\PackageController::class, 'delete'])->name('packages.delete');
     Route::delete('/packages/{package}', [\App\Http\Controllers\Admin\PackageController::class, 'destroy'])->name('packages.destroy');
-    
+
     // Schedules Management (page-based CRUD)
     Route::get('/schedules', [\App\Http\Controllers\Admin\ScheduleController::class, 'index'])->name('schedules.index');
     Route::get('/schedules/add', [\App\Http\Controllers\Admin\ScheduleController::class, 'create'])->name('schedules.create');
@@ -118,6 +116,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::put('/bookings/{booking}/status', [\App\Http\Controllers\Admin\BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
     Route::get('/bookings/{booking}/delete', [\App\Http\Controllers\Admin\BookingController::class, 'delete'])->name('bookings.delete');
     Route::delete('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'destroy'])->name('bookings.destroy');
+
+    // Payment QR Codes Management
+    Route::resource('payment-qrs', \App\Http\Controllers\Admin\PaymentQrController::class)->parameters([
+        'payment-qrs' => 'paymentQr'
+    ]);
 });
 
 // Public Tour Management Routes (for guests and users)
@@ -153,12 +156,12 @@ Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
+// Route::middleware(['auth'])->group(function () {
+//     Route::redirect('settings', 'settings/profile');
 
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
-});
+//     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
+//     Volt::route('settings/password', 'settings.password')->name('settings.password');
+//     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+// });
 
 require __DIR__ . '/auth.php';

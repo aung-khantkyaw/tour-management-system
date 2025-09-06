@@ -204,8 +204,8 @@
                                     <p class="text-xs font-semibold text-orange-500 uppercase tracking-wide">Payment</p>
                                 </div>
                                 <div class="text-center p-3 bg-blue-50 rounded-xl border border-blue-100">
-                                    <p class="text-sm font-bold text-blue-600">{{ ucfirst($booking->package_status) }}</p>
-                                    <p class="text-xs font-semibold text-blue-500 uppercase tracking-wide">Package</p>
+                                    <p class="text-sm font-bold text-blue-600">{{ ucfirst($booking->booking_status) }}</p>
+                                    <p class="text-xs font-semibold text-blue-500 uppercase tracking-wide">Booking</p>
                                 </div>
                             </div>
                             

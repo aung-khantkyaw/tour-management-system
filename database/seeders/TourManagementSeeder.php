@@ -19,8 +19,8 @@ class TourManagementSeeder extends Seeder
 
         // Destinations
         DB::table('destinations')->insert([
-            ['destination_name' => 'kyaiktiyo', 'destination_profile' => '', 'city' => 'thanton', 'description' => 'Mount Kyaiktiyo, famous for the huge golden rock p'],
-            ['destination_name' => 'shwedagon', 'destination_profile' => '', 'city' => 'yangon', 'description' => 'The Shwedagon is the most sacred Buddhist pagoda i'],
+            ['destination_name' => 'Kyaiktiyo Pagoda', 'destination_profile' => 'destinations/qp90XvUgAXdoUvnM1xmEfJXWKoPDkqjHcWdOHiUr.jpg', 'city' => 'Thanton', 'description' => 'Kyaiktiyo Pagoda (Burmese: ကျိုက်ထီးရိုးဘုရား pronounced [tɕaɪʔtʰíjó pʰəjá] or ဆံတော်ရှင်ကျိုက်ထီးရိုးစေတီတော်မြတ်; Mon: ကျာ်သိယဵု [tɕaiʔ sɔeʔ jɜ̀]listenⓘ; also known as Golden Rock[1]) is a well-known Buddhist pilgrimage site in Mon State, Myanmar. It is a small pagoda (7.3 m (24 ft)) built on the top of a granite boulder covered with gold leaves pasted on by its male worshippers.'],
+            ['destination_name' => 'Shwedagon Pagoda', 'destination_profile' => 'destinations/kN6tV7uvXhLONygzEz1he1Qmtdkpxa9b0NgvPRTm.jpg', 'city' => 'Yangon', 'description' => 'The Shwedagon Pagoda (Burmese: ရွှေတိဂုံဘုရား; MLCTS: shwe ti. gon bhu. ra:, IPA: [ʃwèdəɡòʊɰ̃ pʰəjá]; Mon: ကျာ်ဒဂုၚ်), officially named Shwedagon Zedi Daw (Burmese: ရွှေတိဂုံစေတီတော်, [ʃwèdəɡòʊɰ̃ zèdìdɔ̀], lit. \'Golden Dagon Pagoda\'), and also known as the Great Dagon Pagoda and the Golden Pagoda, is a gilded stupa located in Yangon, Myanmar.\r\n\r\nThe Shwedagon is the most sacred Buddhist pagoda in Myanmar, as it is believed to contain relics of the four previous Buddhas of the present kalpa. These relics include the staff of Kakusandha, the water filter of Koṇāgamana, a piece of the robe of Kassapa, and eight strands of hair from the head of Gautama.[2]'],
         ]);
 
         // Guides
@@ -31,8 +31,9 @@ class TourManagementSeeder extends Seeder
 
         // Rooms
         DB::table('rooms')->insert([
-            ['room_type' => 'single'],
-            ['room_type' => 'family'],
+            ['room_type' => 'SINGLE'],
+            ['room_type' => 'FAMILY'],
+            ['room_type' => 'DOUBLE'],
         ]);
 
         // Hotels
@@ -61,8 +62,9 @@ class TourManagementSeeder extends Seeder
 
         // Bookings
         DB::table('bookings')->insert([
-            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-10-03', 'payment_status' => 'Kpay', 'special_request' => 'Pls!!!', 'address' => 'Singapore', 'phone' => '09661437317', 'nationality' => 'Singaporean', 'package_status' => 'One Person Package', 'total_amount' => 100000.00],
-            ['user_id' => 2, 'schedule_id' => 2, 'booking_date' => '2025-10-01', 'payment_status' => 'Wave Pay', 'special_request' => 'Pls!!!!', 'address' => 'Thailand', 'phone' => '09763287905', 'nationality' => 'Thai', 'package_status' => 'Group Package', 'total_amount' => 100000.00],
+            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-10-03', 'payment_method' => 'KBZPay', 'payment_status' => 'pending', 'special_request' => 'Pls!!!', 'address' => 'Singapore', 'phone' => '09661437317', 'nationality' => 'Singaporean', 'booking_status' => 'pending', 'total_amount' => 100000.00, 'payment_transaction_id' => '12345678901234567890'],
+            ['user_id' => 2, 'schedule_id' => 2, 'booking_date' => '2025-10-01', 'payment_method' => 'AyarPay', 'payment_status' => 'confirmed', 'special_request' => 'Pls!!!!', 'address' => 'Thailand', 'phone' => '09763287905', 'nationality' => 'Thai', 'booking_status' => 'confirmed', 'total_amount' => 100000.00, 'payment_transaction_id' => '09876543210987654321'],
+            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-09-06', 'payment_method' => 'KBZPay', 'payment_status' => 'confirmed', 'special_request' => 'plz', 'address' => 'No.806, Khaing Shwe War Street', 'phone' => '09421836385', 'nationality' => 'Myanmar', 'booking_status' => 'confirmed', 'total_amount' => 230000.00, 'payment_transaction_id' => '01234567890123456789'],
         ]);
 
         // Room Choices
@@ -70,12 +72,13 @@ class TourManagementSeeder extends Seeder
             ['booking_id' => 1, 'accom_id' => 2],
             ['booking_id' => 1, 'accom_id' => 1],
             ['booking_id' => 2, 'accom_id' => 1],
+            ['booking_id' => 3, 'accom_id' => 2],
         ]);
 
-        // Payment QR samples (ensure images exist or adjust paths)
+        // Payment QR samples
         DB::table('payment_q_r_s')->insertOrIgnore([
             [
-                'qr_image_path' => 'images/qrs/kbzpay.png',
+                'qr_image_path' => '/storage/qr-codes/G5cp0TQC1K1hQGSagTU4srjif7NbTr89aPwCaVaO.jpg',
                 'qr_type' => 'kbzpay',
                 'description' => 'KBZPay QR for tour payments',
                 'amount' => 0,
@@ -83,18 +86,10 @@ class TourManagementSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'qr_image_path' => 'images/qrs/ayarpay.png',
-                'qr_type' => 'ayarpay',
-                'description' => 'AyarPay QR code',
-                'amount' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'qr_image_path' => 'images/qrs/uabpay.png',
-                'qr_type' => 'uabpay',
-                'description' => 'UABPay QR code',
-                'amount' => 0,
+                'qr_image_path' => '/storage/qr-codes/SXj60S9m5WkIj8voVCZfG10h7pG5IkghYiFGZnOj.jpg',
+                'qr_type' => 'kbzpay',
+                'description' => 'KBZPay QR for tour payments 100000',
+                'amount' => 100000,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -6,7 +6,7 @@
             @php
                 $cards = [
                     ['label'=>'Total Bookings','value'=>$totalBookings,'accent'=>'bg-blue-50 text-blue-700','icon'=>'M3 12l2-2 7-7 7 7 2 2v8a1 1 0 01-1 1h-6V9H9v12H4a1 1 0 01-1-1v-8Z'],
-                    ['label'=>'Pending Packages','value'=>$pendingPackages,'accent'=>'bg-amber-50 text-amber-700','icon'=>'M12 6v6l4 2'],
+                    ['label'=>'Pending Bookings','value'=>$pendingBookings,'accent'=>'bg-amber-50 text-amber-700','icon'=>'M12 6v6l4 2'],
                     ['label'=>'Unique Travelers','value'=>$uniqueTravelers,'accent'=>'bg-emerald-50 text-emerald-700','icon'=>'M5.5 21a6.5 6.5 0 0113 0M12 11a4 4 0 100-8 4 4 0 000 8z'],
                     ['label'=>'Estimated Revenue','value'=>'$'.number_format($estimatedRevenue,0),'accent'=>'bg-indigo-50 text-indigo-700','icon'=>'M3 12h18M3 6h18M3 18h18']
                 ];
@@ -147,7 +147,7 @@
                                 </td>
                                 <td class="px-4 py-2">
                                     @php
-                                        $clr = match($b->package_status){
+                                        $clr = match($b->booking_status){
                                             'pending'=>'bg-amber-50 text-amber-700',
                                             'approved'=>'bg-emerald-50 text-emerald-700',
                                             'cancelled'=>'bg-rose-50 text-rose-700',
@@ -155,7 +155,7 @@
                                         };
                                     @endphp
                                     <span class="inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium {{ $clr }}">
-                                        {{ $b->package_status ?? '—' }}
+                                        {{ $b->booking_status ?? '—' }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-2 text-gray-500">

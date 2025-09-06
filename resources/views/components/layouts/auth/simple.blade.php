@@ -1,17 +1,24 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     @include('partials.head')
 </head>
 
-<body class="min-h-screen bg-white antialiased dark:bg-linear-to-b dark:from-neutral-950 dark:to-neutral-900">
-    <div class="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-        <div class="flex w-full max-w-sm flex-col gap-2">
-            <a href="{{ route('welcome') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
-                <span class="text-xl font-bold">{{ config('app.name', 'Laravel') }}</span>
-            </a>
-            <div class="flex flex-col gap-6">
+<body class="min-h-screen antialiased bg-white">
+    <div class="auth-bg min-h-screen flex items-center justify-center p-6">
+        <!-- Content Container -->
+        <div class="relative z-10 w-full max-w-lg">
+            <!-- Logo/Brand -->
+            <div class="text-center mb-8">
+                <a href="{{ route('welcome') }}" class="inline-block" wire:navigate>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ config('app.name', 'Tour Management') }}</h1>
+                    <p class="text-gray-600 text-sm">Your Gateway to Amazing Adventures</p>
+                </a>
+            </div>
+
+            <!-- Auth Content -->
+            <div class="relative">
                 {{ $slot }}
             </div>
         </div>

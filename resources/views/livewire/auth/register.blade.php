@@ -31,69 +31,86 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         Auth::login($user);
 
-        $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(route('welcome', absolute: false), navigate: true);
     }
 }; ?>
 
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+<div class="w-full max-w-md mx-auto">
+
 
     <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
+    <x-auth-session-status class="mb-6" :status="session('status')" />
 
-    <form method="POST" wire:submit="register" class="flex flex-col gap-6">
-        <!-- Name -->
-        <flux:input
-            wire:model="name"
-            :label="__('Name')"
-            type="text"
-            required
-            autofocus
-            autocomplete="name"
-            :placeholder="__('Full name')"
-        />
-
-        <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email address')"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="email@example.com"
-        />
-
-        <!-- Password -->
-        <flux:input
-            wire:model="password"
-            :label="__('Password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Password')"
-            viewable
-        />
-
-        <!-- Confirm Password -->
-        <flux:input
-            wire:model="password_confirmation"
-            :label="__('Confirm password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Confirm password')"
-            viewable
-        />
-
-        <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
-                {{ __('Create account') }}
-            </flux:button>
+    <!-- Register Form -->
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+            <p class="text-gray-600">Join us today and start your journey</p>
         </div>
-    </form>
+        <form method="POST" wire:submit="register" class="space-y-6">
+            <!-- Name -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                <input wire:model="name" type="text" required autofocus autocomplete="name"
+                    class="text-gray-900 w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                    placeholder="Enter your full name">
+                @error('name') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+            </div>
 
-    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
-        <span>{{ __('Already have an account?') }}</span>
-        <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
+            <!-- Email Address -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                <input wire:model="email" type="email" required autocomplete="email"
+                    class="text-gray-900 w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                    placeholder="Enter your email address">
+                @error('email') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                <input wire:model="password" type="password" required autocomplete="new-password"
+                    class="text-gray-900 w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                    placeholder="Create a strong password">
+                @error('password') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
+                <input wire:model="password_confirmation" type="password" required autocomplete="new-password"
+                    class="text-gray-900 w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                    placeholder="Confirm your password">
+                @error('password_confirmation') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Terms Agreement -->
+            <div class="flex items-start">
+                <input type="checkbox" id="terms" required
+                    class="mt-1 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                <label for="terms" class="ml-2 text-sm text-gray-700">
+                    I agree to the <a href="#" class="text-emerald-600 hover:text-emerald-800 font-medium">Terms of
+                        Service</a> and <a href="#" class="text-emerald-600 hover:text-emerald-800 font-medium">Privacy
+                        Policy</a>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-emerald-600 to-green-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-emerald-700 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                Create Account
+            </button>
+        </form>
+    </div>
+
+    <!-- Login Link -->
+    <div class="text-center mt-6">
+        <p class="text-gray-600">
+            Already have an account?
+            <a href="{{ route('login') }}" class="text-emerald-600 hover:text-emerald-800 font-semibold" wire:navigate>
+                Sign in here
+            </a>
+        </p>
     </div>
 </div>

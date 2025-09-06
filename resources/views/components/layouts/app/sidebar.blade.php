@@ -155,6 +155,20 @@
                             <span>Tour Guides</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.payment-qrs.index') }}" @class([
+                            'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
+                            request()->routeIs('admin.payment-qrs.*')
+                            ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
+                        ])>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                            </svg>
+                            <span>Payment QR Codes</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -180,7 +194,6 @@
             <!-- Upward dropdown -->
             <div x-cloak x-show="userMenu" x-transition.origin-bottom @click.outside="userMenu=false"
                 class="absolute bottom-[calc(100%+0.75rem)] left-4 right-4 z-50 rounded-md border border-gray-200 bg-white shadow-lg divide-y divide-gray-200 overflow-hidden">
-                <a href="{{ route('settings.profile') }}" class="block px-4 py-2 text-sm hover:bg-gray-50">Settings</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">

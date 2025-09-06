@@ -13,7 +13,7 @@ class DashboardController extends Controller
     public function __invoke()
     {
         $totalBookings     = Booking::count();
-        $pendingPackages   = Booking::where('package_status', 'pending')->count();
+        $pendingBookings   = Booking::where('booking_status', 'pending')->count();
         $uniqueTravelers   = Booking::distinct('user_id')->count('user_id');
         $totalHotels       = Hotel::count();
         $totalUsers        = User::count();
@@ -69,7 +69,7 @@ class DashboardController extends Controller
 
         return view('dashboard', compact(
             'totalBookings',
-            'pendingPackages',
+            'pendingBookings',
             'uniqueTravelers',
             'totalHotels',
             'totalUsers',

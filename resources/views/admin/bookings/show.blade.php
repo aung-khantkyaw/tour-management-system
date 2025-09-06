@@ -96,6 +96,35 @@
                         </div>
                     </div>
 
+                    <!-- Room Information -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div class="px-8 py-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
+                            <h2 class="text-xl font-bold text-gray-900">Room Information</h2>
+                        </div>
+                        <div class="p-8">
+                            @forelse($booking->roomChoices as $roomChoice)
+                                <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Hotel</label>
+                                            <p class="text-lg font-bold text-gray-900 mt-1">{{ $roomChoice->accommodation->hotel->name ?? 'N/A' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Room Type</label>
+                                            <p class="text-lg font-bold text-gray-900 mt-1">{{ $roomChoice->accommodation->room->room_type ?? 'N/A' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Price</label>
+                                            <p class="text-lg font-bold text-gray-900 mt-1">${{ number_format($roomChoice->accommodation->price ?? 0, 2) }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-gray-500">No room selected</p>
+                            @endforelse
+                        </div>
+                    </div>
+
                     <!-- Special Requests -->
                     @if($booking->special_request)
                     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
@@ -132,13 +161,13 @@
                                 </div>
                                 
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Package Status</label>
-                                    <select name="package_status" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200">
-                                        <option value="pending" {{ $booking->package_status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="confirmed" {{ $booking->package_status === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                                        <option value="in_progress" {{ $booking->package_status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                        <option value="completed" {{ $booking->package_status === 'completed' ? 'selected' : '' }}>Completed</option>
-                                        <option value="cancelled" {{ $booking->package_status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Booking Status</label>
+                                    <select name="booking_status" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200">
+                                        <option value="pending" {{ $booking->booking_status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="confirmed" {{ $booking->booking_status === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                        <option value="in_progress" {{ $booking->booking_status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                        <option value="completed" {{ $booking->booking_status === 'completed' ? 'selected' : '' }}>Completed</option>
+                                        <option value="cancelled" {{ $booking->booking_status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                                     </select>
                                 </div>
                                 
@@ -176,13 +205,13 @@
                                 </span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Package Status:</span>
+                                <span class="text-gray-600">Booking Status:</span>
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold 
-                                    {{ $booking->package_status === 'confirmed' ? 'bg-green-100 text-green-800' : 
-                                       ($booking->package_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                       ($booking->package_status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
-                                       ($booking->package_status === 'completed' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'))) }}">
-                                    {{ ucfirst(str_replace('_', ' ', $booking->package_status)) }}
+                                    {{ $booking->booking_status === 'confirmed' ? 'bg-green-100 text-green-800' : 
+                                       ($booking->booking_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                       ($booking->booking_status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
+                                       ($booking->booking_status === 'completed' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'))) }}">
+                                    {{ ucfirst(str_replace('_', ' ', $booking->booking_status)) }}
                                 </span>
                             </div>
                             @if($booking->payment_transaction_id)

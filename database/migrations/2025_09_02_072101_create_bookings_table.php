@@ -13,13 +13,14 @@ return new class extends Migration {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id('booking_id');
             $table->date('booking_date');
+            $table->string('payment_method', 50);
             $table->string('payment_status', 50);
             $table->string('payment_transaction_id', 100)->nullable();
             $table->string('special_request', 100)->nullable();
             $table->string('address', 50);
             $table->string('phone', 50);
             $table->string('nationality', 50);
-            $table->string('package_status', 50);
+            $table->string('booking_status', 50);
             $table->decimal('total_amount', 10, 2);
             $table->foreignId('user_id')->constrained('users', 'user_id');
             $table->foreignId('schedule_id')->constrained('schedules', 'schedule_id');

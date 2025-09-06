@@ -20,7 +20,7 @@ class BookingController extends Controller
 
     public function show(Booking $booking)
     {
-        $booking->load(['user', 'schedule.touristPackage.destination', 'schedule.touristPackage.guide', 'roomChoices']);
+        $booking->load(['user', 'schedule.touristPackage.destination', 'schedule.touristPackage.guide', 'roomChoices.accommodation.hotel', 'roomChoices.accommodation.room']);
         return view('admin.bookings.show', compact('booking'));
     }
 
@@ -28,12 +28,12 @@ class BookingController extends Controller
     {
         $request->validate([
             'payment_status' => 'required|in:pending,confirmed,cancelled,refunded',
-            'package_status' => 'required|in:pending,confirmed,in_progress,completed,cancelled',
+            'booking_status' => 'required|in:pending,confirmed,in_progress,completed,cancelled',
         ]);
 
         $booking->update([
             'payment_status' => $request->payment_status,
-            'package_status' => $request->package_status,
+            'booking_status' => $request->booking_status,
         ]);
 
         return redirect()->route('admin.bookings.index')
@@ -43,6 +43,7 @@ class BookingController extends Controller
     public function destroy(Booking $booking)
     {
         try {
+            $booking->roomChoices()->delete();
             $booking->delete();
             return redirect()->route('admin.bookings.index')
                 ->with('success', 'Booking deleted successfully!');
