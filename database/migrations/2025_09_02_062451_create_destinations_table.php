@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('destination_name', 50);
             $table->string('destination_profile', 255);
             $table->string('city', 50);
-            $table->string('description', 50);
+            $table->longText('description');
             $table->timestamps();
         });
     }

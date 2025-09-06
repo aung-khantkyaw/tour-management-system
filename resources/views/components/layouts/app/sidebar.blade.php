@@ -4,6 +4,7 @@
 
 <head>
     @include('partials.head')
+    @livewireStyles
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 
@@ -22,7 +23,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
                 <x-app-logo class="h-8 w-auto" />
             </a>
         </div>
@@ -33,14 +34,14 @@
                 <p class="px-2 mb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">Platform</p>
                 <ul class="space-y-1">
                     <li>
-                        <a href="{{ route('dashboard') }}" @class([
+                        <a href="{{ route('admin.dashboard') }}" @class([
                             'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
-                            request()->routeIs('dashboard')
+                            request()->routeIs('admin.dashboard')
                             ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
                             : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
                         ])>
                             <svg class="w-4 h-4"
-                                :class="{'text-white': {{ request()->routeIs('dashboard') ? 'true' : 'false' }}, 'text-blue-500 group-hover:text-blue-600': {{ request()->routeIs('dashboard') ? 'false' : 'true' }}}"
+                                :class="{'text-white': {{ request()->routeIs('admin.dashboard') ? 'true' : 'false' }}, 'text-blue-500 group-hover:text-blue-600': {{ request()->routeIs('admin.dashboard') ? 'false' : 'true' }}}"
                                 fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6" />
@@ -52,28 +53,106 @@
             </div>
 
             <div>
-                <p class="px-2 mb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">Resources</p>
+                <p class="px-2 mb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">Tour Management</p>
                 <ul class="space-y-1">
                     <li>
-                        <a href="https://github.com/laravel/livewire-starter-kit" target="_blank"
-                            class="flex items-center gap-2 rounded-md px-3 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
-                            <svg class="w-4 h-4 text-gray-500 group-hover:text-blue-600" fill="currentColor"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M12 .5C5.37.5 0 5.87 0 12.55c0 5.3 3.44 9.79 8.2 11.38.6.12.82-.27.82-.58 0-.28-.01-1.03-.02-2.02-3.34.74-4.04-1.65-4.04-1.65-.55-1.42-1.34-1.8-1.34-1.8-1.1-.78.08-.76.08-.76 1.22.09 1.87 1.28 1.87 1.28 1.08 1.9 2.83 1.35 3.52 1.03.11-.8.42-1.35.76-1.66-2.67-.31-5.47-1.37-5.47-6.1 0-1.35.47-2.45 1.24-3.31-.12-.31-.54-1.56.12-3.25 0 0 1.01-.33 3.3 1.26a11.1 11.1 0 0 1 3-.42c1.02 0 2.05.14 3 .42 2.28-1.59 3.29-1.26 3.29-1.26.66 1.69.24 2.94.12 3.25.77.86 1.23 1.96 1.23 3.31 0 4.74-2.81 5.78-5.49 6.09.43.38.81 1.11.81 2.24 0 1.62-.02 2.93-.02 3.33 0 .32.22.71.82.58A11.56 11.56 0 0 0 24 12.55C24 5.87 18.63.5 12 .5Z" />
+                        <a href="{{ route('admin.destinations.index') }}" @class([
+                            'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
+                            request()->routeIs('admin.destinations.*')
+                            ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
+                        ])>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            <span>Repository</span>
+                            <span>Destinations</span>
                         </a>
                     </li>
                     <li>
-                        <a href="https://laravel.com/docs" target="_blank"
-                            class="flex items-center gap-2 rounded-md px-3 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
-                            <svg class="w-4 h-4 text-gray-500 group-hover:text-blue-600" fill="none"
-                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <a href="{{ route('admin.packages.index') }}" @class([
+                            'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
+                            request()->routeIs('admin.packages.*')
+                            ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
+                        ])>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 6v6l4 2m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M9 10l3-3 3 3" />
                             </svg>
-                            <span>Documentation</span>
+                            <span>Packages</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.schedules.index') }}" @class([
+                            'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
+                            request()->routeIs('admin.schedules.*')
+                            ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
+                        ])>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span>Schedules</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.bookings.index') }}" @class([
+                            'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
+                            request()->routeIs('admin.bookings.*')
+                            ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
+                        ])>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            <span>Bookings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.hotels.index') }}" @class([
+                            'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
+                            request()->routeIs('admin.hotels.*')
+                            ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
+                        ])>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                            </svg>
+                            <span>Hotels</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.accommodations.index') }}" @class([
+                            'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
+                            request()->routeIs('admin.accommodations.*')
+                            ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
+                        ])>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                            <span>Accommodations</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.guides.index') }}" @class([
+                            'group flex items-center gap-2 rounded-md px-3 py-2 font-medium transition',
+                            request()->routeIs('admin.guides.*')
+                            ? 'bg-blue-600 text-white shadow ring-1 ring-blue-500/60'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
+                        ])>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <span>Tour Guides</span>
                         </a>
                     </li>
                 </ul>
@@ -133,6 +212,7 @@
     <main class="flex-1 w-full lg:pl-64 pt-14 lg:pt-0">
         {{ $slot }}
     </main>
+    @livewireScripts
 </body>
 
 </html>

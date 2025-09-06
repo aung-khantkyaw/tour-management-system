@@ -7,6 +7,7 @@ use App\Models\Schedule;
 use App\Models\Hotel;
 use App\Models\RoomChoice;
 use App\Models\User;
+use App\Models\PaymentQR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,11 @@ class BookingController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('livewire.guest.booking', compact('schedule', 'hotels'));
+        $paymentQrs = PaymentQR::orderBy('qr_type')->orderByDesc('amount')->get();
+        $packagePrice = $schedule->touristPackage?->singlepackage_fee
+            ?? $schedule->touristPackage?->fullpackage_fee
+            ?? 0;
+        return view('livewire.guest.booking', compact('schedule', 'hotels', 'paymentQrs', 'packagePrice'));
     }
 
     public function store(Request $request)
@@ -103,6 +108,8 @@ class BookingController extends Controller
 
         $totalPrice = $packagePrice + $roomPrice;
 
+        $qr = PaymentQR::forProviderAmount($booking->payment_status, $totalPrice)->first();
+
         return view('livewire.guest.booking-ticket', compact(
             'booking',
             'eticket',
@@ -110,7 +117,20 @@ class BookingController extends Controller
             'user',
             'packagePrice',
             'roomPrice',
-            'totalPrice'
+            'totalPrice',
+            'qr'
         ));
+    }
+
+    /**
+     * Display admin listing of bookings with management options.
+     */
+    public function adminIndex()
+    {
+        $bookings = Booking::with(['user', 'schedule.touristPackage', 'roomChoices.accommodation.hotel'])
+            ->orderBy('booking_date', 'desc')
+            ->paginate(15);
+
+        return view('livewire.admin.bookings', compact('bookings'));
     }
 }

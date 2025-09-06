@@ -61,9 +61,15 @@
                     @foreach($latestDestinations as $d)
                         <a href="{{ route('destination.packages', $d->destination_id) }}"
                             class="group block relative overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-200 transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <div
-                                class="h-40 flex items-center justify-center bg-gradient-to-br from-blue-500/70 to-indigo-600/70 text-white text-4xl font-semibold">
-                                {{ strtoupper(substr($d->destination_name, 0, 1)) }}
+                            <div class="relative h-40 overflow-hidden">
+                                @if($d->destination_profile)
+                                    <img src="{{ asset('storage/' . $d->destination_profile) }}" alt="{{ $d->destination_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                @else
+                                    <div class="h-full bg-gradient-to-br from-blue-500/70 to-indigo-600/70 flex items-center justify-center text-white text-4xl font-semibold">
+                                        {{ strtoupper(substr($d->destination_name, 0, 1)) }}
+                                    </div>
+                                @endif
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
                             <div class="p-5 space-y-4">
                                 <div class="space-y-1">

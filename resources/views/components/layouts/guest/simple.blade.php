@@ -53,8 +53,8 @@
         : 'text-gray-700 hover:bg-gray-100' }}">{{ $l['label'] }}</a>
                     @endforeach
                     @auth
-                    @php($active = request()->routeIs('dashboard'))
-                    <a href="{{ route('dashboard') }}" wire:navigate @click="open=false" class="block rounded-md px-3 py-2 text-sm {{ $active
+                    @php($active = request()->routeIs('admin.dashboard'))
+                    <a href="{{ route('admin.dashboard') }}" wire:navigate @click="open=false" class="block rounded-md px-3 py-2 text-sm {{ $active
         ? 'bg-blue-600 text-white'
         : 'text-gray-700 hover:bg-gray-100' }}">Dashboard</a>
                     @endauth
@@ -74,7 +74,7 @@
 
                     @if($isAdmin)
                         <!-- Admin: show Dashboard button -->
-                        <a href="{{ route('dashboard') }}" wire:navigate
+                        <a href="{{ route('admin.dashboard') }}" wire:navigate
                             class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-500 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50">
                             Dashboard
                         </a>
@@ -159,7 +159,7 @@
                         <li><a href="{{ route('history') }}" wire:navigate
                                 class="hover:text-gray-900 transition">History</a></li>
                         @auth
-                            <li><a href="{{ route('dashboard') }}" wire:navigate
+                            <li><a href="{{ route('admin.dashboard') }}" wire:navigate
                                     class="hover:text-gray-900 transition">Dashboard</a></li>
                         @else
                             <li><a href="{{ route('login') }}" wire:navigate

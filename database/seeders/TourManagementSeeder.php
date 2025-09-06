@@ -61,8 +61,8 @@ class TourManagementSeeder extends Seeder
 
         // Bookings
         DB::table('bookings')->insert([
-            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-10-03', 'payment_status' => 'Kpay', 'special_request' => 'Pls!!!', 'address' => 'Singapore', 'phone' => '09661437317', 'nationality' => 'Singaporean', 'package_status' => 'One Person Package'],
-            ['user_id' => 2, 'schedule_id' => 2, 'booking_date' => '2025-10-01', 'payment_status' => 'Wave Pay', 'special_request' => 'Pls!!!!', 'address' => 'Thailand', 'phone' => '09763287905', 'nationality' => 'Thai', 'package_status' => 'Group Package'],
+            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-10-03', 'payment_status' => 'Kpay', 'special_request' => 'Pls!!!', 'address' => 'Singapore', 'phone' => '09661437317', 'nationality' => 'Singaporean', 'package_status' => 'One Person Package', 'total_amount' => 100000.00],
+            ['user_id' => 2, 'schedule_id' => 2, 'booking_date' => '2025-10-01', 'payment_status' => 'Wave Pay', 'special_request' => 'Pls!!!!', 'address' => 'Thailand', 'phone' => '09763287905', 'nationality' => 'Thai', 'package_status' => 'Group Package', 'total_amount' => 100000.00],
         ]);
 
         // Room Choices
@@ -70,6 +70,34 @@ class TourManagementSeeder extends Seeder
             ['booking_id' => 1, 'accom_id' => 2],
             ['booking_id' => 1, 'accom_id' => 1],
             ['booking_id' => 2, 'accom_id' => 1],
+        ]);
+
+        // Payment QR samples (ensure images exist or adjust paths)
+        DB::table('payment_q_r_s')->insertOrIgnore([
+            [
+                'qr_image_path' => 'images/qrs/kbzpay.png',
+                'qr_type' => 'kbzpay',
+                'description' => 'KBZPay QR for tour payments',
+                'amount' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'qr_image_path' => 'images/qrs/ayarpay.png',
+                'qr_type' => 'ayarpay',
+                'description' => 'AyarPay QR code',
+                'amount' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'qr_image_path' => 'images/qrs/uabpay.png',
+                'qr_type' => 'uabpay',
+                'description' => 'UABPay QR code',
+                'amount' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

@@ -189,6 +189,29 @@
                     </div>
                 </div>
 
+                @if(isset($qr) && $qr)
+                    <div class="space-y-4">
+                        <h2 class="text-sm font-semibold tracking-wide text-gray-900 uppercase">Payment QR</h2>
+                        <div
+                            class="rounded-md border border-gray-200 bg-gray-50 p-4 flex flex-col sm:flex-row sm:items-center gap-5">
+                            <div
+                                class="w-44 h-44 bg-white border border-gray-200 rounded-md flex items-center justify-center overflow-hidden shadow-inner">
+                                <img src="{{ $qr->url }}" alt="{{ strtoupper($qr->qr_type) }} QR"
+                                    class="w-full h-full object-contain" />
+                            </div>
+                            <div class="text-xs text-gray-600 space-y-2">
+                                <p>Payment Method: <span
+                                        class="font-medium text-gray-800">{{ $booking->payment_status }}</span></p>
+                                @if($qr->description)
+                                    <p>{{ $qr->description }}</p>
+                                @endif
+                                <p class="text-[11px] text-gray-500">If you've already paid, keep your transaction
+                                    reference. Admin will verify and update status.</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 @if($booking->special_request)
                     <div class="space-y-2">
                         <h2 class="text-sm font-semibold tracking-wide text-gray-900 uppercase">Special Request</h2>

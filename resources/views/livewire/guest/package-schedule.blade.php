@@ -8,8 +8,8 @@
             <div class="flex flex-col md:flex-row">
                 <!-- Destination Image / Initial -->
                 <div class="md:w-1/3 h-56 md:h-auto relative">
-                    @if($destination?->image_path)
-                        <img src="{{ asset($destination->image_path) }}" alt="{{ $destination->destination_name }}"
+                    @if($destination?->destination_profile)
+                        <img src="{{ asset('storage/' . $destination->destination_profile) }}" alt="{{ $destination->destination_name }}"
                             class="h-full w-full object-cover">
                     @else
                         <div

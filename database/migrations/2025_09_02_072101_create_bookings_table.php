@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('phone', 50);
             $table->string('nationality', 50);
             $table->string('package_status', 50);
+            $table->decimal('total_amount', 10, 2);
             $table->foreignId('user_id')->constrained('users', 'user_id');
             $table->foreignId('schedule_id')->constrained('schedules', 'schedule_id');
             $table->timestamps();

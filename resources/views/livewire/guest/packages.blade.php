@@ -17,9 +17,16 @@
                 @foreach($packages as $p)
                     <div
                         class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition">
-                        <div
-                            class="h-36 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white flex items-center justify-center">
-                            <span class="text-xl font-semibold tracking-wide">{{ $p['name'] }}</span>
+                        <div class="relative h-36 overflow-hidden">
+                            @if($p['destination_image'])
+                                <img src="{{ asset('storage/' . $p['destination_image']) }}" alt="{{ $p['destination'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
+                            @else
+                                <div class="h-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600"></div>
+                            @endif
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-xl font-semibold tracking-wide text-white text-center px-4">{{ $p['name'] }}</span>
+                            </div>
                         </div>
                         <div class="p-5 flex-1 flex flex-col">
                             <div class="mb-3 space-y-1.5 text-sm">

@@ -38,4 +38,16 @@ class ScheduleController extends Controller
             'schedules' => $schedules,
         ]);
     }
+
+    /**
+     * Display admin listing of schedules with management options.
+     */
+    public function adminIndex()
+    {
+        $schedules = Schedule::with('touristPackage')
+            ->orderBy('from_date', 'desc')
+            ->paginate(15);
+
+        return view('livewire.admin.schedules', compact('schedules'));
+    }
 }

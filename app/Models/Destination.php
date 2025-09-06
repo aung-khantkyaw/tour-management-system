@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Destination extends Model
 {
     protected $primaryKey = 'destination_id';
-    protected $fillable = ['destination_name', 'city', 'description'];
+    protected $fillable = ['destination_name', 'city', 'description', 'destination_profile'];
 
     public function hotels()
     {

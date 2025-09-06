@@ -7,12 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Guide extends Model
 {
     protected $primaryKey = 'guide_id';
-    protected $fillable = ['user_id', 'phone', 'language'];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = ['gname', 'email', 'phone', 'language', 'profile_image'];
 
     public function touristPackages()
     {
