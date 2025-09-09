@@ -9,7 +9,11 @@ class PackagesController extends Controller
     public function index()
     {
         $packages = TouristPackage::with(['destination', 'guide'])
-            ->withCount('schedules')
+            ->withCount([
+                'schedules' => function ($query) {
+                    $query->where('available_places', '>', 0);
+                }
+            ])
             ->orderBy('package_name')
             ->get()
             ->map(function ($p) {
@@ -37,7 +41,11 @@ class PackagesController extends Controller
     public function adminIndex()
     {
         $packages = TouristPackage::with(['destination', 'guide'])
-            ->withCount('schedules')
+            ->withCount([
+                'schedules' => function ($query) {
+                    $query->where('available_places', '>', 0);
+                }
+            ])
             ->orderBy('package_name')
             ->paginate(12);
 

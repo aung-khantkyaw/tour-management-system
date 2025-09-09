@@ -46,7 +46,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $targetRoute = $isAdmin ? route('dashboard', absolute: false) : route('welcome', absolute: false);
 
-        $this->redirectIntended(default: $targetRoute, navigate: true);
+        $this->redirectIntended(default: $targetRoute);
     }
 
     /**
@@ -92,7 +92,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
             <p class="text-gray-600">Sign in to your account to continue</p>
         </div>
-        <form method="POST" wire:submit="login" class="space-y-6">
+        <form method="POST" wire:submit.prevent="login" class="space-y-6">
+            @csrf
             <!-- Email Address -->
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
@@ -106,12 +107,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <div>
                 <div class="flex items-center justify-between mb-2">
                     <label class="block text-sm font-semibold text-gray-700">Password</label>
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}"
-                            class="text-sm text-blue-600 hover:text-blue-800 font-medium" wire:navigate>
-                            Forgot password?
-                        </a>
-                    @endif
                 </div>
                 <input wire:model="password" type="password" required autocomplete="current-password"
                     class="text-gray-900 w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"

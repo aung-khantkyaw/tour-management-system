@@ -14,7 +14,11 @@ class PackageController extends Controller
     public function index()
     {
         $packages = TouristPackage::with(['destination', 'guide'])
-            ->withCount('schedules')
+            ->withCount([
+                'schedules' => function ($query) {
+                    $query->where('available_places', '>', 0);
+                }
+            ])
             ->paginate(10);
 
         return view('admin.packages.index', compact('packages'));

@@ -19,13 +19,15 @@
                         class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition">
                         <div class="relative h-36 overflow-hidden">
                             @if($p['destination_image'])
-                                <img src="{{ asset('storage/' . $p['destination_image']) }}" alt="{{ $p['destination'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img src="{{ asset('storage/' . $p['destination_image']) }}" alt="{{ $p['destination'] }}"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
                             @else
                                 <div class="h-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600"></div>
                             @endif
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <span class="text-xl font-semibold tracking-wide text-white text-center px-4">{{ $p['name'] }}</span>
+                                <span
+                                    class="text-xl font-semibold tracking-wide text-white text-center px-4">{{ $p['name'] }}</span>
                             </div>
                         </div>
                         <div class="p-5 flex-1 flex flex-col">
@@ -54,24 +56,47 @@
                                     <span class="text-gray-500">Schedules:</span>
                                     <span class="font-medium text-gray-900">{{ $p['schedules_count'] }}</span>
                                 </p>
-                            </div>du
-
-                            <div class="mt-auto pt-4 border-t border-gray-100">
-                                <div class="flex items-end justify-between">
-                                    <div class="text-xs text-gray-500 space-y-0.5">
-                                        <div>Single: <span
-                                                class="text-gray-800 font-semibold">${{ number_format($p['single_fee'], 2) }}</span>
-                                        </div>
-                                        <div>Group: <span
-                                                class="text-gray-800 font-semibold">${{ number_format($p['full_fee'], 2) }}</span>
-                                        </div>
-                                    </div>
-                                    <a href="{{ route('package.schedule', $p['id']) }}"
-                                        class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white shadow hover:bg-blue-500 transition">
-                                        View Schedules
-                                    </a>
-                                </div>
                             </div>
+
+                            <!-- <div class="mt-auto pt-4 border-t border-gray-100">
+                                                <div class="flex items-end justify-between">
+                                                    <div class="text-xs text-gray-500 space-y-0.5">
+                                                        <div>Single: <span
+                                                                class="text-gray-800 font-semibold">${{ number_format($p['single_fee'], 2) }}</span>
+                                                        </div>
+                                                        <div>Group: <span
+                                                                class="text-gray-800 font-semibold">${{ number_format($p['full_fee'], 2) }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <a href="{{ route('package.schedule', $p['id']) }}"
+                                                        class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white shadow hover:bg-blue-500 transition">
+                                                        View Schedules
+                                                    </a>
+                                                </div>
+                                            </div> -->
+
+                            @if ($p['schedules_count'] > 0)
+                                <div class="mt-auto pt-4 border-t border-gray-100">
+                                    <div class="flex items-end justify-between">
+                                        <div class="text-xs text-gray-500 space-y-0.5">
+                                            <div>Single: <span
+                                                    class="text-gray-800 font-semibold">${{ number_format($p['single_fee'], 2) }}</span>
+                                            </div>
+                                            <div>Group: <span
+                                                    class="text-gray-800 font-semibold">${{ number_format($p['full_fee'], 2) }}</span>
+                                            </div>
+                                        </div>
+                                        <a href="{{ route('package.schedule', $p['id']) }}"
+                                            class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white shadow hover:bg-blue-500 transition">
+                                            View Schedules
+                                        </a>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="mt-auto pt-4 border-t border-gray-100">
+                                    <div class="text-sm text-red-500 font-medium">No available schedules</div>
+                                </div>
+                            @endif
                         </div>
 
                         <div

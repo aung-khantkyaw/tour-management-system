@@ -54,30 +54,46 @@
                     <h2 class="text-lg font-semibold text-gray-900">Choose Package Type & Hotel</h2>
 
                     <div class="space-y-4">
-                        <label class="text-sm font-semibold text-gray-700">Package Type <span
-                                class="text-red-500">*</span></label>
+                        <div class="flex justify-between items-center">
+                            <label class="text-sm font-semibold text-gray-700">Package Type <span
+                                    class="text-red-500">*</span></label>
+                            <div class="text-xs text-gray-600">
+                                Available Places: <span
+                                    class="font-medium text-blue-600">{{ $schedule->available_places }}</span>
+                            </div>
+                        </div>
                         <div class="grid sm:grid-cols-2 gap-3">
-                            <label class="relative cursor-pointer">
+                            <label class="relative cursor-pointer"
+                                :class="{ 'opacity-50 cursor-not-allowed': {{ $schedule->available_places }} < 1 }">
                                 <input type="radio" name="package_type" value="single" class="peer sr-only"
-                                    x-model="packageType" x-on:change="updatePackagePrice()" required>
+                                    x-model="packageType" x-on:change="updatePackagePrice()" required
+                                    :disabled="{{ $schedule->available_places }} < 1">
                                 <div
-                                    class="rounded-md border border-gray-300 bg-white p-4 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-200 transition">
+                                    class="rounded-md border border-gray-300 bg-white p-4 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-200 transition peer-disabled:bg-gray-50 peer-disabled:cursor-not-allowed">
                                     <div class="font-medium text-gray-800">Single Package</div>
                                     <div class="text-sm text-gray-600">Individual traveler package</div>
                                     <div class="text-xs text-blue-600 font-medium mt-1">
                                         ${{ number_format($schedule->touristPackage?->singlepackage_fee ?? 0, 2) }}
                                     </div>
+                                    @if($schedule->available_places < 1)
+                                        <div class="text-xs text-red-500 mt-1">Not available</div>
+                                    @endif
                                 </div>
                             </label>
-                            <label class="relative cursor-pointer">
+                            <label class="relative cursor-pointer"
+                                :class="{ 'opacity-50 cursor-not-allowed': {{ $schedule->available_places }} <= 0 }">
                                 <input type="radio" name="package_type" value="full" class="peer sr-only"
-                                    x-model="packageType" x-on:change="updatePackagePrice()" required>
+                                    x-model="packageType" x-on:change="updatePackagePrice()" required
+                                    :disabled="{{ $schedule->available_places }} <= 0">
                                 <div
-                                    class="rounded-md border border-gray-300 bg-white p-4 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-200 transition">
+                                    class="rounded-md border border-gray-300 bg-white p-4 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-200 transition peer-disabled:bg-gray-50 peer-disabled:cursor-not-allowed">
                                     <div class="font-medium text-gray-800">Full Package</div>
                                     <div class="text-sm text-gray-600">Complete group package</div>
                                     <div class="text-xs text-blue-600 font-medium mt-1">
                                         ${{ number_format($schedule->touristPackage?->fullpackage_fee ?? 0, 2) }}</div>
+                                    @if($schedule->available_places <= 0)
+                                        <div class="text-xs text-red-500 mt-1">Not available</div>
+                                    @endif
                                 </div>
                             </label>
                         </div>
@@ -217,8 +233,7 @@
                                 @foreach(['KBZPay', 'AyarPay', 'UABPay'] as $method)
                                     <label class="relative cursor-pointer">
                                         <input type="radio" name="payment_method" value="{{ $method }}" class="peer sr-only"
-                                            x-model="form.payment_method" required
-                                            x-on:change="showQr('{{ strtolower($method) }}')">
+                                            x-model="form.payment_method" required>
                                         <div
                                             class="rounded-md border border-gray-300 bg-white px-4 py-3 flex items-center justify-center text-sm font-medium text-gray-700 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-200 peer-checked:text-blue-700 transition">
                                             {{ $method }}
@@ -226,7 +241,7 @@
                                     </label>
                                 @endforeach
                             </div>
-                            <p class="text-[11px] text-gray-500">Select a payment provider to view its QR code. Total
+                            <p class="text-[11px] text-gray-500">Select a payment provider. Total
                                 Due: <span class="font-medium text-gray-700" x-text="formatCurrency(totalPrice)"></span>
                             </p>
                             <template x-if="form.payment_method">
@@ -247,45 +262,79 @@
                             </template>
                         </div>
 
-                        <div x-show="form.payment_method" class="space-y-2">
-                            <label class="text-xs font-semibold tracking-wide text-gray-700">Payment Transaction ID <span
-                                    class="text-red-500">*</span></label>
-                            <input name="payment_transaction_id" x-model="form.payment_transaction_id" required
-                                class="rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-500 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
-                                placeholder="Enter 20-digit payment transaction ID" pattern="[0-9]{20}" maxlength="20"
-                                minlength="20" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 20)">
-                            <p class="text-[11px] text-gray-500">Enter the 20-digit payment transaction ID from your payment app
-                                after completing the payment</p>
-                        </div>
-
-                        <template x-if="activeQr">
-                            <div
-                                class="rounded-lg border border-blue-200 bg-blue-50 p-5 flex flex-col md:flex-row md:items-center gap-6">
-                                <div class="flex-1">
-                                    <h3 class="text-sm font-semibold text-blue-900 mb-2" x-text="activeQrLabel"></h3>
-                                    <p class="text-xs text-blue-800 leading-relaxed">Scan the QR with your <span
-                                            class="font-medium" x-text="form.payment_method"></span> app. After payment,
-                                        keep the transaction reference. Booking remains <span
-                                            class="font-semibold">pending</span> until an admin verifies.</p>
-                                </div>
-                                <div
-                                    class="w-44 h-44 rounded-md bg-white border border-blue-200 shadow-inner flex items-center justify-center overflow-hidden">
-                                    <img :src="activeQr.url" :alt="activeQr.description || 'Payment QR'"
-                                        class="w-full h-full object-contain text-gray-900" />
+                        <div x-show="form.payment_method" class="space-y-4">
+                            <!-- Payment Account Information -->
+                            <div class="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                                <h4 class="text-sm font-semibold text-blue-900 mb-3">Payment Account Details</h4>
+                                <div class="space-y-2 text-sm">
+                                    <template x-if="form.payment_method === 'KBZPay'">
+                                        <div class="space-y-1">
+                                            <div class="flex justify-between">
+                                                <span class="text-blue-800">Account Name:</span>
+                                                <span class="font-medium text-blue-900">Myanmar Tours & Travel</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-blue-800">Account Number:</span>
+                                                <span class="font-medium text-blue-900">09-123-456-789</span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template x-if="form.payment_method === 'AyarPay'">
+                                        <div class="space-y-1">
+                                            <div class="flex justify-between">
+                                                <span class="text-blue-800">Account Name:</span>
+                                                <span class="font-medium text-blue-900">Myanmar Tours & Travel</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-blue-800">Account Number:</span>
+                                                <span class="font-medium text-blue-900">09-987-654-321</span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template x-if="form.payment_method === 'UABPay'">
+                                        <div class="space-y-1">
+                                            <div class="flex justify-between">
+                                                <span class="text-blue-800">Account Name:</span>
+                                                <span class="font-medium text-blue-900">Myanmar Tours & Travel</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-blue-800">Account Number:</span>
+                                                <span class="font-medium text-blue-900">09-555-777-999</span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <p class="text-xs text-blue-700 mt-2">
+                                        Please transfer <span class="font-semibold"
+                                            x-text="formatCurrency(totalPrice)"></span>
+                                        to the above account and enter your transaction ID below.
+                                    </p>
                                 </div>
                             </div>
-                        </template>
-                    </div>
 
-                    <div class="flex items-center justify-between pt-4">
-                        <button type="button" x-on:click="step = 1" class="text-sm text-gray-500 hover:text-gray-700">
-                            &larr; Back
-                        </button>
-                        <button type="button" x-on:click="goToConfirm"
-                            class="inline-flex items-center rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow hover:bg-blue-500 transition">
-                            Review
-                        </button>
-                    </div>
+                            <!-- Payment Transaction ID Input -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-semibold tracking-wide text-gray-700">Payment Transaction ID
+                                    <span class="text-red-500">*</span></label>
+                                <input name="payment_transaction_id" x-model="form.payment_transaction_id" required
+                                    class="rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-500 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
+                                    placeholder="Enter 20-digit payment transaction ID" pattern="[0-9]{20}"
+                                    maxlength="20" minlength="20"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 20)">
+                                <p class="text-[11px] text-gray-500">Enter the 20-digit payment transaction ID from your
+                                    payment app after completing the payment to the account above</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4">
+                            <button type="button" x-on:click="step = 1"
+                                class="text-sm text-gray-500 hover:text-gray-700">
+                                &larr; Back
+                            </button>
+                            <button type="button" x-on:click="goToConfirm"
+                                class="inline-flex items-center rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow hover:bg-blue-500 transition">
+                                Review
+                            </button>
+                        </div>
                 </section>
 
                 <!-- STEP 3: Confirm -->
@@ -299,11 +348,6 @@
                         <div class="flex justify-between">
                             <span class="text-gray-500">Payment Method</span>
                             <span class="font-medium text-gray-800" x-text="form.payment_method || '—'"></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Payment Status</span>
-                            <span class="font-medium text-yellow-600"
-                                x-text="form.payment_method ? 'pending' : '—'"></span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-500">Package</span>
@@ -383,8 +427,6 @@
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script>
         function bookingWizard() {
-            const qrs = {!! json_encode($paymentQrs->map(function ($q) {
-    return ['type' => $q->qr_type, 'url' => $q->url, 'description' => $q->description, 'amount' => (int) $q->amount]; }) ?? []) !!};
             return {
                 step: 1,
                 submitting: false,
@@ -398,9 +440,6 @@
                 packagePrice: 0,
                 roomPrice: 0,
                 totalPrice: 0,
-                qrs: qrs,
-                activeQr: null,
-                activeQrLabel: '',
                 form: {
                     phone: '',
                     nationality: '',
@@ -412,7 +451,6 @@
                 updatePackagePrice() {
                     this.packagePrice = this.packageType === 'single' ? this.singlePrice : this.fullPrice;
                     this.totalPrice = this.packagePrice + this.roomPrice;
-                    if (this.form.payment_method) { this.showQr(this.form.payment_method.toLowerCase()); }
                 },
                 selectAccommodation(accomId, hotelId, hotelName, roomType, roomPrice) {
                     this.selectedAccom = accomId;
@@ -421,7 +459,6 @@
                     this.selectedRoomType = roomType;
                     this.roomPrice = parseFloat(roomPrice || 0);
                     this.totalPrice = this.packagePrice + this.roomPrice;
-                    if (this.form.payment_method) { this.showQr(this.form.payment_method.toLowerCase()); }
                 },
                 goToDetails() {
                     if (this.selectedAccom && this.packageType) this.step = 2;
@@ -444,13 +481,6 @@
                         return;
                     }
                     this.step = 3;
-                },
-                showQr(key) {
-                    const matches = this.qrs.filter(q => q.type === key.toLowerCase());
-                    let found = matches.find(q => q.amount === Math.round(this.totalPrice));
-                    if (!found) { found = matches.find(q => q.amount === 0); }
-                    this.activeQr = found || null;
-                    this.activeQrLabel = found && found.description ? found.description : (this.form.payment_method + ' QR Code');
                 },
                 formatCurrency(v) {
                     return '$' + Number(v || 0).toFixed(2);

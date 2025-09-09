@@ -25,14 +25,20 @@ class DestinationController extends Controller
     public function packages(Destination $destination)
     {
         $destination->loadCount(['hotels', 'touristPackages'])
-            ->load(['hotels' => function($query) {
-                $query->select('hotel_id', 'destination_id', 'name', 'rating')
-                      ->orderBy('rating', 'desc')
-                      ->limit(3);
-            }]);
-            
-        $packages = TouristPackage::withCount('schedules')
-            ->with('guide')
+            ->load([
+                'hotels' => function ($query) {
+                    $query->select('hotel_id', 'destination_id', 'name', 'rating')
+                        ->orderBy('rating', 'desc')
+                        ->limit(3);
+                }
+            ]);
+
+        $packages = TouristPackage::with('guide')
+            ->withCount([
+                'schedules' => function ($query) {
+                    $query->where('available_places', '>', 0);
+                }
+            ])
             ->where('destination_id', $destination->destination_id)
             ->orderBy('package_name')
             ->get();

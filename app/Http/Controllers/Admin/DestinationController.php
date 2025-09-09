@@ -83,12 +83,13 @@ class DestinationController extends Controller
 
     public function destroy(Destination $destination)
     {
-        if ($destination->destination_profile && $destination->destination_profile !== 'default-profile.jpg') {
-            if (Storage::disk('public')->exists($destination->destination_profile)) {
-                Storage::disk('public')->delete($destination->destination_profile);
-            }
+        try {
+            $destination->delete();
+            return redirect()->route('admin.destinations.index')
+                ->with('success', 'Destination and all related data deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.destinations.index')
+                ->with('error', 'Cannot delete destination. It may have associated data.');
         }
-        $destination->delete();
-        return redirect()->route('admin.destinations.index')->with('success', 'Destination deleted successfully!');
     }
 }

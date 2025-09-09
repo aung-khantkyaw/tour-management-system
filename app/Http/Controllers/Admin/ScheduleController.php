@@ -21,7 +21,7 @@ class ScheduleController extends Controller
     public function create()
     {
         $packages = TouristPackage::with(['destination', 'guide'])->get();
-        
+
         return view('admin.schedules.create', compact('packages'));
     }
 
@@ -35,7 +35,13 @@ class ScheduleController extends Controller
             'arrival_time' => 'required|string|max:50',
         ]);
 
-        Schedule::create($request->all());
+        // Get the package to initialize available places
+        $package = TouristPackage::find($request->package_id);
+
+        $scheduleData = $request->all();
+        $scheduleData['available_places'] = $package->no_of_people ?? 0;
+
+        Schedule::create($scheduleData);
 
         return redirect()->route('admin.schedules.index')
             ->with('success', 'Schedule created successfully!');
@@ -44,7 +50,7 @@ class ScheduleController extends Controller
     public function edit(Schedule $schedule)
     {
         $packages = TouristPackage::with(['destination', 'guide'])->get();
-        
+
         return view('admin.schedules.edit', compact('schedule', 'packages'));
     }
 
@@ -58,7 +64,15 @@ class ScheduleController extends Controller
             'arrival_time' => 'required|string|max:50',
         ]);
 
-        $schedule->update($request->all());
+        $updateData = $request->all();
+
+        // Only update available_places if package is changed
+        if ($schedule->package_id != $request->package_id) {
+            $package = TouristPackage::find($request->package_id);
+            $updateData['available_places'] = $package->no_of_people ?? 0;
+        }
+
+        $schedule->update($updateData);
 
         return redirect()->route('admin.schedules.index')
             ->with('success', 'Schedule updated successfully!');

@@ -19,7 +19,13 @@ Route::get('/', function () {
         ->limit(3)
         ->get();
 
-    return view('welcome', compact('latestDestinations'));
+    $heroImages = [
+        asset('storage/destinations/1.jpg'),
+        asset('storage/destinations/2.jpg'),
+        asset('storage/destinations/3.jpg')
+    ];
+
+    return view('welcome', compact('latestDestinations', 'heroImages'));
 })->name('welcome');
 
 Route::get('/about', function () {
@@ -116,11 +122,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', \App\Http\Middleware
     Route::put('/bookings/{booking}/status', [\App\Http\Controllers\Admin\BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
     Route::get('/bookings/{booking}/delete', [\App\Http\Controllers\Admin\BookingController::class, 'delete'])->name('bookings.delete');
     Route::delete('/bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'destroy'])->name('bookings.destroy');
-
-    // Payment QR Codes Management
-    Route::resource('payment-qrs', \App\Http\Controllers\Admin\PaymentQrController::class)->parameters([
-        'payment-qrs' => 'paymentQr'
-    ]);
 });
 
 // Public Tour Management Routes (for guests and users)

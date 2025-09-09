@@ -56,15 +56,15 @@ class TourManagementSeeder extends Seeder
 
         // Schedules
         DB::table('schedules')->insert([
-            ['package_id' => 1, 'from_date' => '2025-10-05', 'to_date' => '2025-10-07', 'departure_time' => '10 AM', 'arrival_time' => '12AM'],
-            ['package_id' => 2, 'from_date' => '2025-10-06', 'to_date' => '2025-10-08', 'departure_time' => '8 AM', 'arrival_time' => '1 PM'],
+            ['package_id' => 1, 'from_date' => '2025-10-05', 'to_date' => '2025-10-07', 'departure_time' => '10 AM', 'arrival_time' => '12AM', 'available_places' => 3], // 5 capacity - 2 single bookings = 3 available
+            ['package_id' => 2, 'from_date' => '2025-10-06', 'to_date' => '2025-10-08', 'departure_time' => '8 AM', 'arrival_time' => '1 PM', 'available_places' => 0], // full package booked = 0 available
         ]);
 
         // Bookings
         DB::table('bookings')->insert([
-            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-10-03', 'payment_method' => 'KBZPay', 'payment_status' => 'pending', 'special_request' => 'Pls!!!', 'address' => 'Singapore', 'phone' => '09661437317', 'nationality' => 'Singaporean', 'booking_status' => 'pending', 'total_amount' => 100000.00, 'payment_transaction_id' => '12345678901234567890'],
-            ['user_id' => 2, 'schedule_id' => 2, 'booking_date' => '2025-10-01', 'payment_method' => 'AyarPay', 'payment_status' => 'confirmed', 'special_request' => 'Pls!!!!', 'address' => 'Thailand', 'phone' => '09763287905', 'nationality' => 'Thai', 'booking_status' => 'confirmed', 'total_amount' => 100000.00, 'payment_transaction_id' => '09876543210987654321'],
-            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-09-06', 'payment_method' => 'KBZPay', 'payment_status' => 'confirmed', 'special_request' => 'plz', 'address' => 'No.806, Khaing Shwe War Street', 'phone' => '09421836385', 'nationality' => 'Myanmar', 'booking_status' => 'confirmed', 'total_amount' => 230000.00, 'payment_transaction_id' => '01234567890123456789'],
+            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-10-03', 'payment_method' => 'KBZPay', 'special_request' => 'Pls!!!', 'address' => 'Singapore', 'phone' => '09661437317', 'nationality' => 'Singaporean', 'booking_status' => 'pending', 'total_amount' => 100000.00, 'payment_transaction_id' => '12345678901234567890', 'package_type' => 'single'],
+            ['user_id' => 2, 'schedule_id' => 2, 'booking_date' => '2025-10-01', 'payment_method' => 'AyarPay', 'special_request' => 'Pls!!!!', 'address' => 'Thailand', 'phone' => '09763287905', 'nationality' => 'Thai', 'booking_status' => 'confirmed', 'total_amount' => 1000000.00, 'payment_transaction_id' => '09876543210987654321', 'package_type' => 'full'],
+            ['user_id' => 1, 'schedule_id' => 1, 'booking_date' => '2025-09-06', 'payment_method' => 'KBZPay', 'special_request' => 'plz', 'address' => 'No.806, Khaing Shwe War Street', 'phone' => '09421836385', 'nationality' => 'Myanmar', 'booking_status' => 'confirmed', 'total_amount' => 230000.00, 'payment_transaction_id' => '01234567890123456789', 'package_type' => 'single'],
         ]);
 
         // Room Choices
@@ -73,26 +73,6 @@ class TourManagementSeeder extends Seeder
             ['booking_id' => 1, 'accom_id' => 1],
             ['booking_id' => 2, 'accom_id' => 1],
             ['booking_id' => 3, 'accom_id' => 2],
-        ]);
-
-        // Payment QR samples
-        DB::table('payment_q_r_s')->insertOrIgnore([
-            [
-                'qr_image_path' => '/storage/qr-codes/G5cp0TQC1K1hQGSagTU4srjif7NbTr89aPwCaVaO.jpg',
-                'qr_type' => 'kbzpay',
-                'description' => 'KBZPay QR for tour payments',
-                'amount' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'qr_image_path' => '/storage/qr-codes/SXj60S9m5WkIj8voVCZfG10h7pG5IkghYiFGZnOj.jpg',
-                'qr_type' => 'kbzpay',
-                'description' => 'KBZPay QR for tour payments 100000',
-                'amount' => 100000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
         ]);
     }
 }

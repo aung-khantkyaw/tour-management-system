@@ -12,6 +12,7 @@ class ScheduleController extends Controller
     {
         $package = null;
         $schedules = Schedule::with('touristPackage')
+            ->where('available_places', '>', 0)
             ->whereDate('from_date', '>=', now()->toDateString())
             ->orderBy('from_date')
             ->limit(30)
@@ -26,7 +27,7 @@ class ScheduleController extends Controller
         $package->load([
             'destination.hotels',   // hotels for this destination
             'guide',
-            'schedules' => fn($q) => $q->orderBy('from_date')
+            'schedules' => fn($q) => $q->where('available_places', '>', 0)->orderBy('from_date')
         ]);
 
         // Upcoming (filter out past)

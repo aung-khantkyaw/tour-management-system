@@ -7,7 +7,6 @@ use App\Models\Schedule;
 use App\Models\Hotel;
 use App\Models\RoomChoice;
 use App\Models\User;
-use App\Models\PaymentQR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +14,12 @@ class BookingController extends Controller
 {
     public function create(Schedule $schedule)
     {
+        // Check if schedule has available places
+        if ($schedule->available_places <= 0) {
+            return redirect()->route('schedules')
+                ->with('error', 'This schedule is fully booked and no longer accepting new bookings.');
+        }
+
         $schedule->load('touristPackage.destination');
 
         $destinationId = optional($schedule->touristPackage?->destination)->destination_id;
@@ -24,11 +29,10 @@ class BookingController extends Controller
             ->orderBy('name')
             ->get();
 
-        $paymentQrs = PaymentQR::orderBy('qr_type')->orderByDesc('amount')->get();
         $packagePrice = $schedule->touristPackage?->singlepackage_fee
             ?? $schedule->touristPackage?->fullpackage_fee
             ?? 0;
-        return view('livewire.guest.booking', compact('schedule', 'hotels', 'paymentQrs', 'packagePrice'));
+        return view('livewire.guest.booking', compact('schedule', 'hotels', 'packagePrice'));
     }
 
     public function store(Request $request)
@@ -44,14 +48,28 @@ class BookingController extends Controller
             'payment_method' => 'required|in:KBZPay,AyarPay,UABPay',
             'payment_transaction_id' => 'required|string|regex:/^[0-9]{20}$/',
             'calculated_total' => 'required|numeric|min:0',
+            'package_type' => 'required|in:single,full',
         ]);
+
+        // Get the schedule and check available places
+        $schedule = Schedule::findOrFail($validated['schedule_id']);
+
+        // Check capacity based on package type
+        if ($validated['package_type'] === 'single') {
+            if (!$schedule->hasAvailablePlaces(1)) {
+                return back()->withErrors(['package_type' => 'No available places for single package booking.']);
+            }
+        } else { // full package
+            if ($schedule->available_places <= 0) {
+                return back()->withErrors(['package_type' => 'No available places for full package booking.']);
+            }
+        }
 
         $booking = Booking::create([
             'user_id' => Auth::id(),
             'schedule_id' => $validated['schedule_id'],
             'booking_date' => now(),
             'payment_method' => $validated['payment_method'],
-            'payment_status' => 'pending',
             'booking_status' => 'pending',
             'phone' => $validated['phone'],
             'nationality' => $validated['nationality'] ?? null,
@@ -59,12 +77,20 @@ class BookingController extends Controller
             'special_request' => $validated['special_request'] ?? null,
             'payment_transaction_id' => $validated['payment_transaction_id'],
             'total_amount' => $validated['calculated_total'],
+            'package_type' => $validated['package_type'],
         ]);
 
         RoomChoice::create([
             'booking_id' => $booking->booking_id,
             'accom_id' => $validated['accom_id'],
         ]);
+
+        // Update available places based on package type
+        if ($validated['package_type'] === 'single') {
+            $schedule->reduceAvailablePlaces(1);
+        } else { // full package - set to 0
+            $schedule->update(['available_places' => 0]);
+        }
 
         $eticket = 'BK-' . str_pad($booking->booking_id, 6, '0', STR_PAD_LEFT);
 
@@ -113,8 +139,6 @@ class BookingController extends Controller
 
         $totalPrice = $packagePrice + $roomPrice;
 
-        $qr = PaymentQR::forProviderAmount($booking->payment_method, $totalPrice)->first();
-
         return view('livewire.guest.booking-ticket', compact(
             'booking',
             'eticket',
@@ -122,8 +146,7 @@ class BookingController extends Controller
             'user',
             'packagePrice',
             'roomPrice',
-            'totalPrice',
-            'qr'
+            'totalPrice'
         ));
     }
 

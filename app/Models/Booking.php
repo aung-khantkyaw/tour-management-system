@@ -12,14 +12,14 @@ class Booking extends Model
         'schedule_id',
         'booking_date',
         'payment_method',
-        'payment_status',
         'special_request',
         'address',
         'phone',
         'nationality',
         'booking_status',
         'payment_transaction_id',
-        'total_amount'
+        'total_amount',
+        'package_type'
     ];
 
     public function user()
@@ -39,13 +39,13 @@ class Booking extends Model
 
     public function confirmBooking()
     {
-        $this->payment_status = 'confirmed';
+        $this->booking_status = 'confirmed';
         return $this->save();
     }
 
     public function cancelBooking()
     {
-        $this->payment_status = 'cancelled';
+        $this->booking_status = 'cancelled';
         return $this->save();
     }
 

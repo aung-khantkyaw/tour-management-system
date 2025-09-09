@@ -1,16 +1,28 @@
 <x-layouts.guest title="Welcome - Tour Management System">
     <!-- Hero Carousel -->
-    <section id="hero" class="relative w-full h-[380px] sm:h-[460px] overflow-hidden group">
+    <section id="hero" class="relative w-full h-[380px] sm:h-[600px] overflow-hidden group">
         <div class="absolute inset-0">
-            <div class="h-full w-full relative" x-data="{ current: 0, imgs: [
-                        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=60',
-                        'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=1400&q=60',
-                        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=60'
-                    ], advance(){ this.current = (this.current+1)%this.imgs.length } }"
-                x-init="setInterval(()=>advance(),5000)">
+            <div class="h-full w-full relative" x-data="heroCarousel()" x-init="setInterval(() => advance(), 5000)">
+                <script>
+                function heroCarousel() {
+                    return {
+                        current: 0,
+                        imgs: @json($heroImages),
+                        advance() {
+                            this.current = (this.current + 1) % this.imgs.length;
+                        }
+                    }
+                }
+                </script>
                 <template x-for="(img, idx) in imgs" :key="idx">
-                    <div x-show="current===idx" x-transition:fade class="absolute inset-0 bg-center bg-cover"
-                        :style="`background-image:url(${img})`"></div>
+                    <div x-show="current===idx" x-transition:fade class="absolute inset-0">
+                        <img :src="img" 
+                             :alt="`Hero image ${idx + 1}`"
+                             class="w-full h-full object-cover"
+                             style="z-index:2;"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 hidden"></div>
+                    </div>
                 </template>
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div
@@ -19,7 +31,7 @@
                     <p class="text-lg sm:text-xl mb-6">Curated journeys to breathtaking destinations with expert local
                         guides.</p>
                     <div class="flex flex-wrap justify-center gap-4">
-                        <a href="#destinations"
+                        <a href="destinations"
                             class="px-5 py-3 rounded-md bg-primary-600 hover:bg-primary-500 text-white font-medium transition">Explore
                             Destinations</a>
                         <a href="#contact"
@@ -39,11 +51,15 @@
     </section>
 
     <!-- Intro Paragraph -->
-    <section class="py-12 bg-white">
+    <!-- Stylish Intro Quote Section -->
+    <section class="py-10 bg-white">
         <div class="max-w-5xl mx-auto px-6">
-            <p class="text-lg text-gray-700 leading-relaxed">
-                "Let us guide you to new places, new smiles, and new memories because every trip deserves to be
-                unforgettable."
+            <!-- Google Fonts import for Playfair Display -->
+            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+            <p class="text-2xl md:text-3xl text-gray-800 leading-relaxed font-bold italic text-center" style="font-family: 'Playfair Display', serif; letter-spacing: 0.01em;">
+                <span class="block text-primary-600 text-4xl mb-2">“</span>
+                Let us guide you to new places, new smiles, and new memories<br class="hidden sm:inline"> because every trip deserves to be unforgettable.
+                <span class="block text-primary-600 text-4xl mt-2">”</span>
             </p>
         </div>
     </section>
@@ -52,7 +68,10 @@
     <section id="destinations" class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto px-6 mb-8 flex items-center justify-between">
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Latest Destinations</h2>
-            <a href="{{ route('destinations') }}" class="text-sm text-blue-600 hover:underline">View All</a>
+            <a href="{{ route('destinations') }}"
+               class="inline-block px-5 py-2 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold shadow hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition">
+                View All
+            </a>
         </div>
 
         <div class="max-w-7xl mx-auto px-6">
