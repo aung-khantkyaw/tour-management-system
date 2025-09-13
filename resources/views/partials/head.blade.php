@@ -5,13 +5,22 @@
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
-
-<!-- <link rel="preconnect" href="https://fonts.bunny.net">
-<link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" /> -->
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-<!-- Alpine.js CDN for interactivity -->
+<!-- Alpine Navigate Plugin -->
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/navigate@latest/dist/cdn.min.js" 
+        onerror="this.onerror=null; this.src='https://unpkg.com/@alpinejs/navigate@3.x.x/dist/cdn.min.js'"></script>
+
+<!-- Alpine.js Core -->
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.0/dist/cdn.min.js"></script>
 
-<!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
+<!-- Alpine Navigate Fallback -->
+<script>
+document.addEventListener('alpine:init', () => {
+    if (!window.Alpine.navigate) {
+        window.Alpine.navigate = (url) => window.location.href = url;
+    }
+});
+</script>
+
 @fluxAppearance

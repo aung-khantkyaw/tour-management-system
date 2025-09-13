@@ -80,22 +80,24 @@
                                     @endif
                                 </div>
                             </label>
-                            <label class="relative cursor-pointer"
-                                :class="{ 'opacity-50 cursor-not-allowed': {{ $schedule->available_places }} <= 0 }">
-                                <input type="radio" name="package_type" value="full" class="peer sr-only"
-                                    x-model="packageType" x-on:change="updatePackagePrice()" required
-                                    :disabled="{{ $schedule->available_places }} <= 0">
-                                <div
-                                    class="rounded-md border border-gray-300 bg-white p-4 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-200 transition peer-disabled:bg-gray-50 peer-disabled:cursor-not-allowed">
-                                    <div class="font-medium text-gray-800">Full Package</div>
-                                    <div class="text-sm text-gray-600">Complete group package</div>
-                                    <div class="text-xs text-blue-600 font-medium mt-1">
-                                        ${{ number_format($schedule->touristPackage?->fullpackage_fee ?? 0, 2) }}</div>
-                                    @if($schedule->available_places <= 0)
-                                        <div class="text-xs text-red-500 mt-1">Not available</div>
-                                    @endif
-                                </div>
-                            </label>
+                            @if ($schedule->touristPackage?->no_of_people === $schedule->available_places)
+                                <label class="relative cursor-pointer"
+                                    :class="{ 'opacity-50 cursor-not-allowed': {{ $schedule->available_places }} <= 0 }">
+                                    <input type="radio" name="package_type" value="full" class="peer sr-only"
+                                        x-model="packageType" x-on:change="updatePackagePrice()" required
+                                        :disabled="{{ $schedule->available_places }} <= 0">
+                                    <div
+                                        class="rounded-md border border-gray-300 bg-white p-4 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-200 transition peer-disabled:bg-gray-50 peer-disabled:cursor-not-allowed">
+                                        <div class="font-medium text-gray-800">Full Package</div>
+                                        <div class="text-sm text-gray-600">Complete group package</div>
+                                        <div class="text-xs text-blue-600 font-medium mt-1">
+                                            ${{ number_format($schedule->touristPackage?->fullpackage_fee ?? 0, 2) }}</div>
+                                        @if($schedule->available_places <= 0)
+                                            <div class="text-xs text-red-500 mt-1">Not available</div>
+                                        @endif
+                                    </div>
+                                </label>
+                            @endif
                         </div>
                     </div>
 

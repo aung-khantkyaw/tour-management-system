@@ -16,9 +16,9 @@ class IsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->check()) {
-            return redirect()->route('login');
+            return redirect()->route('welcome')->with('error', 'Please log in to access this page.');
         }
-        
+
         if (auth()->user()->role !== 'admin') {
             return redirect()->route('welcome')->with('error', 'Access denied. Admin privileges required.');
         }

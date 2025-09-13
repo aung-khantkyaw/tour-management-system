@@ -9,8 +9,8 @@
                 <!-- Destination Image / Initial -->
                 <div class="md:w-1/3 h-56 md:h-auto relative">
                     @if($destination?->destination_profile)
-                        <img src="{{ asset('storage/' . $destination->destination_profile) }}" alt="{{ $destination->destination_name }}"
-                            class="h-full w-full object-cover">
+                        <img src="{{ asset('storage/' . $destination->destination_profile) }}"
+                            alt="{{ $destination->destination_name }}" class="h-full w-full object-cover">
                     @else
                         <div
                             class="h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-500/70 to-indigo-600/70 text-white text-6xl font-semibold">
@@ -187,13 +187,21 @@
                         <div
                             class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm hover:shadow transition flex flex-col">
                             <div class="space-y-1">
-                                <h3 class="font-semibold text-gray-900">
-                                    {{ \Illuminate\Support\Carbon::parse($schedule->from_date)->format('M d, Y') }}
-                                </h3>
-                                <p class="text-xs text-gray-600">
-                                    {{ \Illuminate\Support\Carbon::parse($schedule->from_date)->format('M d') }} –
-                                    {{ \Illuminate\Support\Carbon::parse($schedule->to_date)->format('M d, Y') }}
-                                </p>
+                                <div class="flex justify-between items-center gap-4">
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">
+                                            {{ \Illuminate\Support\Carbon::parse($schedule->from_date)->format('M d, Y') }}
+                                        </h3>
+                                        <p class="text-xs text-gray-600">
+                                            {{ \Illuminate\Support\Carbon::parse($schedule->from_date)->format('M d') }} –
+                                            {{ \Illuminate\Support\Carbon::parse($schedule->to_date)->format('M d, Y') }}
+                                        </p>
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        {{ $schedule->available_places }} / {{ $package->no_of_people ?? 'N/A' }} places
+                                        available
+                                    </div>
+                                </div>
                                 <div class="flex flex-wrap gap-1.5 mt-2 text-[11px]">
                                     @if($schedule->departure_time)
                                         <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">

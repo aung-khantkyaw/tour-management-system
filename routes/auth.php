@@ -19,6 +19,10 @@ Route::middleware('guest')->group(function () {
 
 });
 
+// Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
+//     ->middleware('guest')
+//     ->name('login');
+
 Route::middleware('auth')->group(function () {
     Volt::route('verify-email', 'auth.verify-email')
         ->name('verification.notice');

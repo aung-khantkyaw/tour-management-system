@@ -48,7 +48,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
             <p class="text-gray-600">Join us today and start your journey</p>
         </div>
-        <form method="POST" wire:submit.prevent="register" class="space-y-6">
+        <form wire:submit.prevent="register" method="POST" class="space-y-6">
             @csrf
             <!-- Name -->
             <div>

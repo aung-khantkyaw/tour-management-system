@@ -44,13 +44,21 @@
                 <div class="rounded-lg border border-gray-200 p-5 hover:shadow-sm transition bg-white">
                     <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                         <div class="space-y-1.5">
-                            <h3 class="font-semibold text-lg text-gray-900">
-                                {{ $pkg?->package_name ?? 'Package #' . $schedule->package_id }}
-                            </h3>
-                            <p class="text-blue-600 font-medium text-sm">
-                                {{ \Illuminate\Support\Carbon::parse($schedule->from_date)->format('M d') }} –
-                                {{ \Illuminate\Support\Carbon::parse($schedule->to_date)->format('M d, Y') }}
-                            </p>
+                            <div class="flex justify-between items-center gap-4">
+                                <div>
+                                    <h3 class="font-semibold text-lg text-gray-900">
+                                        {{ $pkg?->package_name ?? 'Package #' . $schedule->package_id }}
+                                    </h3>
+                                    <p class="text-blue-600 font-medium text-sm">
+                                        {{ \Illuminate\Support\Carbon::parse($schedule->from_date)->format('M d') }} –
+                                        {{ \Illuminate\Support\Carbon::parse($schedule->to_date)->format('M d, Y') }}
+                                    </p>
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    {{ $schedule->available_places }} / {{ $pkg?->no_of_people ?? 'N/A' }} places
+                                    available
+                                </div>
+                            </div>
                             <p class="text-gray-600 text-sm">
                                 Duration: {{ $pkg?->duration_days ?? 'N/A' }} days ·
                                 Capacity: {{ $pkg?->no_of_people ?? 'N/A' }} ·

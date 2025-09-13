@@ -92,7 +92,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
             <p class="text-gray-600">Sign in to your account to continue</p>
         </div>
-        <form method="POST" wire:submit.prevent="login" class="space-y-6">
+        <form wire:submit.prevent="login" method="POST" class="space-y-6">
             @csrf
             <!-- Email Address -->
             <div>
